@@ -115,9 +115,9 @@
     <button class="restart-btn" id="restartBtn">Retry this band</button>
   </div>
 </main>
-<footer>Questions? <a href="mailto:apelt@clemson.edu" style="color:var(--gold-dark);">apelt@clemson.edu</a></footer>
+<footer>Questions? <a href="/cdn-cgi/l/email-protection#117061747d6551727d747c627e7f3f747564" style="color:var(--gold-dark);"><span class="__cf_email__" data-cfemail="ec8d9c898098ac8f8089819f8382c2898899">[email&#160;protected]</span></a></footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const PROXY = 'https://anthropic-proxy.aprilpelt.workers.dev';
 
 const BANDS = {
@@ -295,7 +295,7 @@ function submitCombination(index) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-5',
       max_tokens: 1000,
       system: systemPrompt,
       messages: [{ role: 'user', content: userPrompt }]
@@ -413,13 +413,4 @@ document.addEventListener('DOMContentLoaded', function() {
     var btn = e.target.closest('.band-btn');
     if (btn) selectBand(parseInt(btn.dataset.band));
   });
-  document.getElementById('restartBtn').addEventListener('click', function() {
-    currentIndex = 0;
-    document.getElementById('completionScreen').classList.remove('visible');
-    renderExercise(0);
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-});
-</script>
-</body>
-</html>
+  document.getElementById('restartBtn').addEven
