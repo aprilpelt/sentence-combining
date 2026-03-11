@@ -221,9 +221,9 @@
 
 </main>
 
-<footer>Questions? <a href="mailto:apelt@clemson.edu" style="color:var(--gold-dark);">apelt@clemson.edu</a></footer>
+<footer>Questions? <a href="/cdn-cgi/l/email-protection#99f8e9fcf5edd9faf5fcf4eaf6f7b7fcfdec" style="color:var(--gold-dark);"><span class="__cf_email__" data-cfemail="87e6f7e2ebf3c7e4ebe2eaf4e8e9a9e2e3f2">[email&#160;protected]</span></a></footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const BANDS = {
   6: {
     label: "Grades 6–7",
@@ -523,7 +523,7 @@ Student's combination: "${userText}"
 Evaluate their combination.`;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("https://anthropic-proxy.aprilpelt.workers.dev", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -633,15 +633,4 @@ function advanceOrComplete(index) {
 function restartBand() {
   currentIndex = 0;
   document.getElementById('completionScreen').classList.remove('visible');
-  renderExercise(0);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-</script>
-</body>
-</html>
+  rende
