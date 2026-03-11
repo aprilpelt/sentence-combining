@@ -7,134 +7,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --parchment:  #f5f0e1;
-    --parchment2: #ede8d5;
-    --border:     #d9d3c7;
-    --gold:       #c4a24c;
-    --gold-dark:  #a07830;
-    --text:       #2e2e2e;
-    --muted:      #5a5a5a;
+    --parchment:#f5f0e1;--parchment2:#ede8d5;--border:#d9d3c7;
+    --gold:#c4a24c;--gold-dark:#a07830;--text:#2e2e2e;--muted:#5a5a5a;
     --rose-bg:#f5e8e8;--rose-bd:#c9a0a0;--rose-dk:#a05050;
     --orange-bg:#f5ede0;--orange-bd:#c9a878;--orange-dk:#a06830;
     --yellow-bg:#f5f0d8;--yellow-bd:#c9bf78;--yellow-dk:#908030;
   }
-
-  body {
-    background-color: var(--parchment);
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 1rem;
-    color: var(--text);
-    line-height: 1.65;
-    min-height: 100vh;
-  }
-
-  header {
-    background-color: var(--parchment2);
-    border-bottom: 2px solid var(--gold);
-    padding: 1.4rem 2rem 1.1rem;
-    text-align: center;
-  }
+  body { background:var(--parchment); font-family:'Source Serif 4',Georgia,serif; font-size:1rem; color:var(--text); line-height:1.65; min-height:100vh; }
+  header { background:var(--parchment2); border-bottom:2px solid var(--gold); padding:1.4rem 2rem 1.1rem; text-align:center; }
   header h1 { font-family:'Playfair Display',Georgia,serif; font-size:1.5rem; }
   header p { font-size:0.88rem; color:var(--muted); margin-top:0.3rem; font-style:italic; }
-
   main { max-width:780px; margin:0 auto; padding:1.6rem 1.4rem 3rem; }
-
-  /* Grade band selector */
   .band-selector { margin-bottom:1.8rem; }
-  .band-selector-label {
-    font-size:0.8rem; font-weight:600; text-transform:uppercase;
-    letter-spacing:0.07em; color:var(--muted); margin-bottom:0.6rem;
-  }
+  .band-selector-label { font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); margin-bottom:0.6rem; }
   .band-buttons { display:flex; gap:0.5rem; flex-wrap:wrap; }
-  .band-btn {
-    font-family:'Source Serif 4',Georgia,serif;
-    font-size:0.88rem;
-    padding:0.45rem 1rem;
-    border-radius:4px;
-    border:1px solid var(--border);
-    background:var(--parchment2);
-    color:var(--text);
-    cursor:pointer;
-    transition:all 0.15s;
-  }
+  .band-btn { font-family:'Source Serif 4',Georgia,serif; font-size:0.88rem; padding:0.45rem 1rem; border-radius:4px; border:1px solid var(--border); background:var(--parchment2); color:var(--text); cursor:pointer; transition:all 0.15s; }
   .band-btn:hover { border-color:var(--gold); color:var(--gold-dark); }
-  .band-btn.active {
-    background:var(--gold);
-    border-color:var(--gold);
-    color:#fff;
-    font-weight:600;
-  }
-
-  /* Band intro */
-  .band-intro {
-    background:var(--parchment2);
-    border-left:4px solid var(--gold);
-    border-radius:0 5px 5px 0;
-    padding:0.9rem 1.1rem;
-    margin-bottom:1.5rem;
-    font-size:0.93rem;
-    color:var(--muted);
-    font-style:italic;
-    display:none;
-  }
+  .band-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; font-weight:600; }
+  .band-intro { background:var(--parchment2); border-left:4px solid var(--gold); border-radius:0 5px 5px 0; padding:0.9rem 1.1rem; margin-bottom:1.5rem; font-size:0.93rem; color:var(--muted); font-style:italic; display:none; }
   .band-intro.visible { display:block; }
-
-  /* Progress */
   .progress-wrap { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
   .progress-track { flex:1; height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
   .progress-fill { height:100%; background:var(--gold); border-radius:3px; transition:width 0.4s ease; }
   .progress-label { font-size:0.8rem; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
-
-  /* Card */
-  .exercise-card {
-    border-radius:8px; border:1px solid var(--border);
-    overflow:hidden; margin-bottom:1.2rem;
-    transition:box-shadow 0.2s;
-  }
+  .exercise-card { border-radius:8px; border:1px solid var(--border); overflow:hidden; margin-bottom:1.2rem; transition:box-shadow 0.2s; }
   .exercise-card:focus-within { box-shadow:0 2px 12px rgba(196,162,76,0.18); }
-
-  .card-header {
-    background:var(--parchment2); border-bottom:1px solid var(--border);
-    padding:0.8rem 1.1rem; display:flex; align-items:baseline; gap:0.6rem;
-  }
+  .card-header { background:var(--parchment2); border-bottom:1px solid var(--border); padding:0.8rem 1.1rem; display:flex; align-items:baseline; gap:0.6rem; }
   .card-number { font-family:'Playfair Display',serif; font-size:0.76rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold-dark); }
   .card-technique { font-size:0.81rem; color:var(--muted); font-style:italic; }
-
   .card-body { padding:1.1rem 1.1rem 0.7rem; }
-
-  .source-sentences {
-    background:var(--parchment2); border-left:3px solid var(--gold);
-    border-radius:0 4px 4px 0; padding:0.8rem 1rem; margin-bottom:0.9rem;
-  }
+  .source-sentences { background:var(--parchment2); border-left:3px solid var(--gold); border-radius:0 4px 4px 0; padding:0.8rem 1rem; margin-bottom:0.9rem; }
   .source-sentences p { font-size:0.96rem; margin-bottom:0.35rem; }
   .source-sentences p:last-child { margin-bottom:0; }
   .source-sentences p::before { content:attr(data-n) '. '; color:var(--gold-dark); font-weight:600; font-size:0.84rem; }
-
   .prompt-label { font-size:0.82rem; font-weight:600; color:var(--muted); margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
   .hint { font-size:0.82rem; color:var(--muted); font-style:italic; margin-bottom:0.55rem; border-left:2px solid var(--border); padding-left:0.6rem; }
-
-  textarea {
-    width:100%; min-height:72px;
-    border:1px solid var(--border); border-radius:5px;
-    background:#fffdf8; font-family:'Source Serif 4',Georgia,serif;
-    font-size:0.96rem; color:var(--text); padding:0.65rem 0.8rem;
-    line-height:1.55; resize:vertical; outline:none; transition:border-color 0.2s;
-  }
+  textarea { width:100%; min-height:72px; border:1px solid var(--border); border-radius:5px; background:#fffdf8; font-family:'Source Serif 4',Georgia,serif; font-size:0.96rem; color:var(--text); padding:0.65rem 0.8rem; line-height:1.55; resize:vertical; outline:none; transition:border-color 0.2s; }
   textarea:focus { border-color:var(--gold); }
   textarea::placeholder { color:#b0a898; font-style:italic; }
-
   .card-footer { padding:0.75rem 1.1rem 0.9rem; display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
-
-  button {
-    font-family:'Source Serif 4',Georgia,serif; font-size:0.87rem;
-    cursor:pointer; border-radius:4px; padding:0.48rem 1rem;
-    border:none; transition:background 0.15s, transform 0.1s;
-  }
+  button { font-family:'Source Serif 4',Georgia,serif; font-size:0.87rem; cursor:pointer; border-radius:4px; padding:0.48rem 1rem; border:none; transition:background 0.15s, transform 0.1s; }
   button:active { transform:translateY(1px); }
   button:disabled { opacity:0.45; cursor:not-allowed; transform:none; }
-
   .btn-submit { background:var(--gold); color:#fff; font-weight:600; }
   .btn-submit:hover:not(:disabled) { background:var(--gold-dark); }
   .btn-skip { background:transparent; color:var(--muted); border:1px solid var(--border); }
@@ -143,22 +58,14 @@
   .btn-next:hover:not(:disabled) { background:var(--gold-dark); }
   .btn-retry { background:transparent; color:var(--gold-dark); border:1px solid var(--gold); }
   .btn-retry:hover { background:var(--parchment2); }
-
   .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:0.3rem; }
   @keyframes spin { to { transform:rotate(360deg); } }
-
-  /* Feedback — cycles rose/orange/yellow per exercise index */
-  .feedback {
-    border-radius:0 0 7px 7px; border-top:1px solid var(--border);
-    padding:1rem 1.1rem 1.1rem; font-size:0.93rem;
-    animation:fadeIn 0.3s ease;
-  }
+  .feedback { border-radius:0 0 7px 7px; border-top:1px solid var(--border); padding:1rem 1.1rem 1.1rem; font-size:0.93rem; animation:fadeIn 0.3s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none} }
   .feedback h4 { font-family:'Playfair Display',serif; font-size:0.93rem; margin-bottom:0.5rem; }
   .feedback p { margin-bottom:0.45rem; line-height:1.6; }
   .feedback p:last-child { margin-bottom:0; }
   .technique-badge { display:inline-block; font-size:0.74rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; border-radius:3px; padding:0.13rem 0.45rem; margin-bottom:0.55rem; }
-
   .fb-0 { background:var(--rose-bg); border-top-color:var(--rose-bd); }
   .fb-0 h4 { color:var(--rose-dk); }
   .fb-0 .technique-badge { background:var(--rose-dk); color:#fff; }
@@ -168,206 +75,90 @@
   .fb-2 { background:var(--yellow-bg); border-top-color:var(--yellow-bd); }
   .fb-2 h4 { color:var(--yellow-dk); }
   .fb-2 .technique-badge { background:var(--yellow-dk); color:#fff; }
-
-  /* Completion */
   .completion { text-align:center; padding:2.2rem 1.4rem; background:var(--parchment2); border:1px solid var(--border); border-radius:8px; display:none; }
   .completion.visible { display:block; animation:fadeIn 0.4s ease; }
   .completion h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:0.65rem; color:var(--gold-dark); }
   .completion p { color:var(--muted); font-size:0.92rem; margin-bottom:0.45rem; }
-  .restart-btn { margin-top:1.1rem; background:var(--gold); color:#fff; font-weight:600; padding:0.55rem 1.3rem; font-size:0.9rem; }
+  .restart-btn { margin-top:1.1rem; background:var(--gold); color:#fff; font-weight:600; padding:0.55rem 1.3rem; font-size:0.9rem; cursor:pointer; }
   .restart-btn:hover { background:var(--gold-dark); }
-
   .api-error { background:#fdf4f4; border:1px solid #c9a0a0; border-radius:5px; padding:0.7rem 1rem; font-size:0.86rem; color:#a05050; margin:0 1.1rem 0.9rem; }
-
   footer { text-align:center; font-size:0.76rem; color:#b0a898; padding:1rem; border-top:1px solid var(--border); margin-top:1rem; }
 </style>
 </head>
 <body>
-
 <header>
-  <h1>Sentence Combining · Grade Band Practice</h1>
+  <h1>Sentence Combining &middot; Grade Band Practice</h1>
   <p>EDSC 4850 &middot; Modeling instruction across grade levels &middot; Clemson University</p>
 </header>
-
 <main>
-
   <div class="band-selector">
     <div class="band-selector-label">Select a grade band</div>
-    <div class="band-buttons">
-      <button class="band-btn" data-band="6" onclick="selectBand(6)">Grades 6–7</button>
-      <button class="band-btn" data-band="8" onclick="selectBand(8)">Grades 8–9</button>
-      <button class="band-btn" data-band="10" onclick="selectBand(10)">Grades 10–11</button>
-      <button class="band-btn" data-band="12" onclick="selectBand(12)">Grade 12</button>
+    <div class="band-buttons" id="bandButtons">
+      <button class="band-btn" data-band="6">Grades 6&ndash;7</button>
+      <button class="band-btn" data-band="8">Grades 8&ndash;9</button>
+      <button class="band-btn" data-band="10">Grades 10&ndash;11</button>
+      <button class="band-btn" data-band="12">Grade 12</button>
     </div>
   </div>
-
   <div class="band-intro" id="bandIntro"></div>
-
   <div id="progressArea" style="display:none;">
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
       <span class="progress-label" id="progressLabel">0 of 3</span>
     </div>
   </div>
-
   <div id="exerciseContainer"></div>
-
   <div class="completion" id="completionScreen">
     <h2>All three done.</h2>
     <p id="completionNote"></p>
     <p>Try another grade band to see how the same techniques scale up or down in complexity.</p>
-    <button class="restart-btn" onclick="restartBand()">Retry this band</button>
+    <button class="restart-btn" id="restartBtn">Retry this band</button>
   </div>
-
 </main>
+<footer>Questions? <a href="mailto:apelt@clemson.edu" style="color:var(--gold-dark);">apelt@clemson.edu</a></footer>
 
-<footer>Questions? <a href="/cdn-cgi/l/email-protection#99f8e9fcf5edd9faf5fcf4eaf6f7b7fcfdec" style="color:var(--gold-dark);"><span class="__cf_email__" data-cfemail="87e6f7e2ebf3c7e4ebe2eaf4e8e9a9e2e3f2">[email&#160;protected]</span></a></footer>
+<script>
+const PROXY = 'https://anthropic-proxy.aprilpelt.workers.dev';
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const BANDS = {
   6: {
-    label: "Grades 6–7",
-    intro: "These exercises are designed for students who are learning to use conjunctions and simple combining strategies for the first time. Sentences are short, vocabulary is accessible, and the techniques are limited to coordination and simple subordination. As a preservice teacher, try each exercise as a student would—then think about how you'd introduce the technique to a class.",
-    completion: "At grades 6–7, the goal is for students to hear what combined sentences sound like and to have a name for what they did. Even naming 'I used because' is meaningful progress at this level.",
-    exercises: [
-      {
-        label: "Exercise 1",
-        technique: "Coordination with and / but",
-        sentences: [
-          "AI can answer questions very quickly.",
-          "AI sometimes gets the answer wrong."
-        ],
-        hint: "Join these two sentences using but or yet to show the contrast between them. Think about which word best captures the relationship."
-      },
-      {
-        label: "Exercise 2",
-        technique: "Subordination with because",
-        sentences: [
-          "You should always check AI answers.",
-          "AI can make things up."
-        ],
-        hint: "Use because to connect these two ideas. Try it two ways: starting with because, and putting because in the middle. Which version do you prefer?"
-      },
-      {
-        label: "Exercise 3",
-        technique: "Subordination with when / if",
-        sentences: [
-          "You use an AI chatbot for homework.",
-          "You are responsible for checking whether the answers are accurate."
-        ],
-        hint: "Use when or if to connect these sentences. The first sentence will become a subordinate clause that sets up the second one."
-      }
+    label:'Grades 6-7',
+    intro:'These exercises are designed for students who are learning to use conjunctions and simple combining strategies for the first time. Sentences are short, vocabulary is accessible, and the techniques are limited to coordination and simple subordination. As a preservice teacher, try each exercise as a student would—then think about how you\'d introduce the technique to a class.',
+    completion:'At grades 6-7, the goal is for students to hear what combined sentences sound like and to have a name for what they did. Even naming "I used because" is meaningful progress at this level.',
+    exercises:[
+      { label:'Exercise 1', technique:'Coordination with and / but', sentences:['AI can answer questions very quickly.','AI sometimes gets the answer wrong.'], hint:'Join these two sentences using but or yet to show the contrast between them. Think about which word best captures the relationship.' },
+      { label:'Exercise 2', technique:'Subordination with because', sentences:['You should always check AI answers.','AI can make things up.'], hint:'Use because to connect these two ideas. Try it two ways: starting with because, and putting because in the middle. Which version do you prefer?' },
+      { label:'Exercise 3', technique:'Subordination with when / if', sentences:['You use an AI chatbot for homework.','You are responsible for checking whether the answers are accurate.'], hint:'Use when or if to connect these sentences. The first sentence will become a subordinate clause that sets up the second one.' }
     ]
   },
   8: {
-    label: "Grades 8–9",
-    intro: "At grades 8–9, exercises introduce relative clauses and appositives, which require students to embed one idea inside another rather than just joining two ideas side by side. Source sentences are longer and involve more abstract concepts. The goal is for students to practice nesting information efficiently.",
-    completion: "At grades 8–9, students are ready to embed information inside sentences rather than just stringing ideas together. The relative clause and appositive are the two structures that most immediately improve writing density and sophistication.",
-    exercises: [
-      {
-        label: "Exercise 1",
-        technique: "Coordination with contrast",
-        sentences: [
-          "Social media algorithms learn what content keeps you engaged.",
-          "They do not know whether that content is accurate.",
-          "They do not know whether it is good for you."
-        ],
-        hint: "Try combining all three sentences into one. Use a coordinating conjunction to handle the contrast, and consider how to fold the last two sentences together efficiently."
-      },
-      {
-        label: "Exercise 2",
-        technique: "Relative clause with who / which",
-        sentences: [
-          "Ted Chiang is a science fiction writer.",
-          "He argued that AI tools are like blurry photographs of the internet.",
-          "His argument helps explain why AI sometimes invents facts."
-        ],
-        hint: "Use who or whose to fold information about Ted Chiang into a single sentence. You probably won't need all three source sentences—use what's most important."
-      },
-      {
-        label: "Exercise 3",
-        technique: "Appositive phrase",
-        sentences: [
-          "Cognitive offloading means letting a tool do your thinking for you.",
-          "Cognitive offloading may reduce critical thinking skills over time.",
-          "A researcher named Gerlich studied this in 2025."
-        ],
-        hint: "Use an appositive to embed the definition of cognitive offloading directly into a sentence about Gerlich's research, so you don't have to define and report separately."
-      }
+    label:'Grades 8-9',
+    intro:'At grades 8-9, exercises introduce relative clauses and appositives, which require students to embed one idea inside another rather than just joining two ideas side by side. Source sentences are longer and involve more abstract concepts. The goal is for students to practice nesting information efficiently.',
+    completion:'At grades 8-9, students are ready to embed information inside sentences rather than just stringing ideas together. The relative clause and appositive are the two structures that most immediately improve writing density and sophistication.',
+    exercises:[
+      { label:'Exercise 1', technique:'Coordination with contrast', sentences:['Social media algorithms learn what content keeps you engaged.','They do not know whether that content is accurate.','They do not know whether it is good for you.'], hint:'Try combining all three sentences into one. Use a coordinating conjunction to handle the contrast, and consider how to fold the last two sentences together efficiently.' },
+      { label:'Exercise 2', technique:'Relative clause with who / which', sentences:['Ted Chiang is a science fiction writer.','He argued that AI tools are like blurry photographs of the internet.','His argument helps explain why AI sometimes invents facts.'], hint:'Use who or whose to fold information about Ted Chiang into a single sentence. You probably won\'t need all three source sentences—use what\'s most important.' },
+      { label:'Exercise 3', technique:'Appositive phrase', sentences:['Cognitive offloading means letting a tool do your thinking for you.','Cognitive offloading may reduce critical thinking skills over time.','A researcher named Gerlich studied this in 2025.'], hint:'Use an appositive to embed the definition of cognitive offloading directly into a sentence about Gerlich\'s research, so you don\'t have to define and report separately.' }
     ]
   },
   10: {
-    label: "Grades 10–11",
-    intro: "At grades 10–11, exercises focus on participial phrases and the rhetorical choices involved in coordination and subordination. Students at this level are ready to think not just about whether a combination is grammatically correct but about what effect it creates—what it emphasizes, what it subordinates, and why those choices matter for argument.",
-    completion: "At grades 10–11, the most important shift is from 'did I combine correctly?' to 'what does this combination do?' Students who can articulate the rhetorical effect of a structural choice are developing real writer's awareness.",
-    exercises: [
-      {
-        label: "Exercise 1",
-        technique: "Participial phrase",
-        sentences: [
-          "Roe and colleagues applied Conceptual Metaphor Theory.",
-          "They compared generative AI to synthetic plastic.",
-          "Both are useful, ubiquitous, and potentially toxic to their environments."
-        ],
-        hint: "Open your sentence with a participial phrase (a verb form ending in -ing) that shows how the researchers approached their argument. Then complete the sentence with their central claim."
-      },
-      {
-        label: "Exercise 2",
-        technique: "Subordination to show cause and consequence",
-        sentences: [
-          "AI tools produce text that sounds fluent and authoritative.",
-          "Readers may not notice when the content contains errors.",
-          "Fluency is not the same thing as accuracy."
-        ],
-        hint: "Use subordination to show the causal chain here: what is it about fluency that creates the risk? Try beginning with because or since, or try using although to introduce a concession."
-      },
-      {
-        label: "Exercise 3",
-        technique: "Free choice — use the most effective combination",
-        sentences: [
-          "Writing a sentence forces a writer to commit to a claim.",
-          "Generating a sentence with AI does not require the same commitment.",
-          "The cognitive work of drafting is where much of the thinking happens."
-        ],
-        hint: "No prescribed technique this time. Combine these sentences in whatever way you think best serves the meaning. Be prepared to name what you did and explain why you made that choice."
-      }
+    label:'Grades 10-11',
+    intro:'At grades 10-11, exercises focus on participial phrases and the rhetorical choices involved in coordination and subordination. Students at this level are ready to think not just about whether a combination is grammatically correct but about what effect it creates—what it emphasizes, what it subordinates, and why those choices matter for argument.',
+    completion:'At grades 10-11, the most important shift is from "did I combine correctly?" to "what does this combination do?" Students who can articulate the rhetorical effect of a structural choice are developing real writer\'s awareness.',
+    exercises:[
+      { label:'Exercise 1', technique:'Participial phrase', sentences:['Roe and colleagues applied Conceptual Metaphor Theory.','They compared generative AI to synthetic plastic.','Both are useful, ubiquitous, and potentially toxic to their environments.'], hint:'Open your sentence with a participial phrase (a verb form ending in -ing) that shows how the researchers approached their argument. Then complete the sentence with their central claim.' },
+      { label:'Exercise 2', technique:'Subordination to show cause and consequence', sentences:['AI tools produce text that sounds fluent and authoritative.','Readers may not notice when the content contains errors.','Fluency is not the same thing as accuracy.'], hint:'Use subordination to show the causal chain here: what is it about fluency that creates the risk? Try beginning with because or since, or try using although to introduce a concession.' },
+      { label:'Exercise 3', technique:'Free choice', sentences:['Writing a sentence forces a writer to commit to a claim.','Generating a sentence with AI does not require the same commitment.','The cognitive work of drafting is where much of the thinking happens.'], hint:'No prescribed technique this time. Combine these sentences in whatever way you think best serves the meaning. Be prepared to name what you did and explain why you made that choice.' }
     ]
   },
   12: {
-    label: "Grade 12",
-    intro: "At grade 12, exercises introduce the semicolon and conjunctive adverb as tools for signaling logical relationships between independent clauses, and they ask students to make and defend complex structural choices. The source sentences are more abstract, the relationships between ideas are more nuanced, and the expectation is that students can articulate not just what they did but why.",
-    completion: "At grade 12, sentence combining becomes a revision strategy as much as a grammar exercise. Students who can combine at this level are developing the kind of syntactic control that shows up in AP and college writing.",
-    exercises: [
-      {
-        label: "Exercise 1",
-        technique: "Semicolon with conjunctive adverb",
-        sentences: [
-          "AI tools can dramatically reduce the effort required to produce a first draft.",
-          "The struggle of drafting is where a great deal of the learning happens.",
-          "Removing that struggle may reduce writing skill development over time."
-        ],
-        hint: "Use a semicolon—either alone or with a conjunctive adverb like however, therefore, or consequently—to connect two of these ideas. Choose the conjunctive adverb that most precisely names the logical relationship you want to signal."
-      },
-      {
-        label: "Exercise 2",
-        technique: "Parallel structure across clauses",
-        sentences: [
-          "AI tools threaten to make writing easier.",
-          "AI tools threaten to make reading harder.",
-          "AI tools threaten to make the distinction between the two less meaningful."
-        ],
-        hint: "These three ideas are naturally parallel. Combine them into a single sentence that makes the parallel structure visible and emphatic. Consider whether coordination or a different structure best serves the rhythm you want."
-      },
-      {
-        label: "Exercise 3",
-        technique: "Free choice — maximum syntactic complexity",
-        sentences: [
-          "Chiang argues that AI is a compression algorithm, not a reasoning system.",
-          "Roe and colleagues argue that AI-generated content is like digital plastic.",
-          "Both metaphors suggest that AI outputs require more critical evaluation, not less, as these tools become more capable."
-        ],
-        hint: "Combine these three ideas into one or two sentences of your own design. You might subordinate one argument to another, use an appositive to handle one of the attributions, or use parallel structure to align the two metaphors. Name every technique you used."
-      }
+    label:'Grade 12',
+    intro:'At grade 12, exercises introduce the semicolon and conjunctive adverb as tools for signaling logical relationships between independent clauses, and they ask students to make and defend complex structural choices. The source sentences are more abstract, the relationships between ideas are more nuanced, and the expectation is that students can articulate not just what they did but why.',
+    completion:'At grade 12, sentence combining becomes a revision strategy as much as a grammar exercise. Students who can combine at this level are developing the kind of syntactic control that shows up in AP and college writing.',
+    exercises:[
+      { label:'Exercise 1', technique:'Semicolon with conjunctive adverb', sentences:['AI tools can dramatically reduce the effort required to produce a first draft.','The struggle of drafting is where a great deal of the learning happens.','Removing that struggle may reduce writing skill development over time.'], hint:'Use a semicolon—either alone or with a conjunctive adverb like however, therefore, or consequently—to connect two of these ideas. Choose the conjunctive adverb that most precisely names the logical relationship you want to signal.' },
+      { label:'Exercise 2', technique:'Parallel structure across clauses', sentences:['AI tools threaten to make writing easier.','AI tools threaten to make reading harder.','AI tools threaten to make the distinction between the two less meaningful.'], hint:'These three ideas are naturally parallel. Combine them into a single sentence that makes the parallel structure visible and emphatic. Consider whether coordination or a different structure best serves the rhythm you want.' },
+      { label:'Exercise 3', technique:'Free choice — maximum complexity', sentences:['Chiang argues that AI is a compression algorithm, not a reasoning system.','Roe and colleagues argue that AI-generated content is like digital plastic.','Both metaphors suggest that AI outputs require more critical evaluation, not less, as these tools become more capable.'], hint:'Combine these three ideas into one or two sentences of your own design. You might subordinate one argument to another, use an appositive to handle one of the attributions, or use parallel structure to align the two metaphors. Name every technique you used.' }
     ]
   }
 };
@@ -375,91 +166,93 @@ const BANDS = {
 let currentBand = null;
 let currentIndex = 0;
 
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function selectBand(band) {
   currentBand = band;
   currentIndex = 0;
-
-  // Update buttons
-  document.querySelectorAll('.band-btn').forEach(b => {
+  document.querySelectorAll('.band-btn').forEach(function(b) {
     b.classList.toggle('active', parseInt(b.dataset.band) === band);
   });
-
-  // Show intro
-  const data = BANDS[band];
-  const intro = document.getElementById('bandIntro');
+  var data = BANDS[band];
+  var intro = document.getElementById('bandIntro');
   intro.textContent = data.intro;
   intro.classList.add('visible');
-
-  // Show progress
   document.getElementById('progressArea').style.display = 'block';
-
-  // Hide completion
   document.getElementById('completionScreen').classList.remove('visible');
-
   renderExercise(0);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function renderExercise(index) {
-  const data = BANDS[currentBand];
-  const ex = data.exercises[index];
-  const container = document.getElementById('exerciseContainer');
+  var data = BANDS[currentBand];
+  var ex = data.exercises[index];
+  var container = document.getElementById('exerciseContainer');
 
-  const card = document.createElement('div');
+  var card = document.createElement('div');
   card.className = 'exercise-card';
-  card.id = `card-${index}`;
+  card.id = 'card-' + index;
 
-  const hdr = document.createElement('div');
+  var hdr = document.createElement('div');
   hdr.className = 'card-header';
-  hdr.innerHTML = `<span class="card-number">${escHtml(ex.label)}</span><span class="card-technique">${escHtml(ex.technique)}</span>`;
+  var num = document.createElement('span');
+  num.className = 'card-number';
+  num.textContent = ex.label;
+  var tech = document.createElement('span');
+  tech.className = 'card-technique';
+  tech.textContent = ex.technique;
+  hdr.appendChild(num);
+  hdr.appendChild(tech);
   card.appendChild(hdr);
 
-  const body = document.createElement('div');
+  var body = document.createElement('div');
   body.className = 'card-body';
 
-  const sources = document.createElement('div');
+  var sources = document.createElement('div');
   sources.className = 'source-sentences';
-  ex.sentences.forEach((s, i) => {
-    const p = document.createElement('p');
+  ex.sentences.forEach(function(s, i) {
+    var p = document.createElement('p');
     p.dataset.n = i + 1;
     p.textContent = s;
     sources.appendChild(p);
   });
   body.appendChild(sources);
 
-  const pl = document.createElement('div');
+  var pl = document.createElement('div');
   pl.className = 'prompt-label';
   pl.textContent = 'Your combination';
   body.appendChild(pl);
 
-  const hint = document.createElement('div');
+  var hint = document.createElement('div');
   hint.className = 'hint';
   hint.textContent = ex.hint;
   body.appendChild(hint);
 
-  const ta = document.createElement('textarea');
-  ta.id = `ta-${index}`;
-  ta.placeholder = 'Type your combined sentence here…';
-  ta.setAttribute('aria-label', `Your sentence combination for exercise ${index + 1}`);
+  var ta = document.createElement('textarea');
+  ta.id = 'ta-' + index;
+  ta.placeholder = 'Type your combined sentence here\u2026';
+  ta.setAttribute('aria-label', 'Your sentence combination for exercise ' + (index + 1));
   body.appendChild(ta);
   card.appendChild(body);
 
-  const footer = document.createElement('div');
+  var footer = document.createElement('div');
   footer.className = 'card-footer';
-  footer.id = `footer-${index}`;
+  footer.id = 'footer-' + index;
 
-  const btnSubmit = document.createElement('button');
-  btnSubmit.className = 'btn-submit';
-  btnSubmit.textContent = 'Get feedback';
-  btnSubmit.id = `btn-submit-${index}`;
-  btnSubmit.onclick = () => submitCombination(index);
-  footer.appendChild(btnSubmit);
+  var btnS = document.createElement('button');
+  btnS.className = 'btn-submit';
+  btnS.textContent = 'Get feedback';
+  btnS.id = 'btn-submit-' + index;
+  btnS.addEventListener('click', function() { submitCombination(index); });
+  footer.appendChild(btnS);
 
-  const btnSkip = document.createElement('button');
-  btnSkip.className = 'btn-skip';
-  btnSkip.textContent = 'Skip';
-  btnSkip.onclick = () => advanceOrComplete(index);
-  footer.appendChild(btnSkip);
+  var btnSk = document.createElement('button');
+  btnSk.className = 'btn-skip';
+  btnSk.textContent = 'Skip';
+  btnSk.addEventListener('click', function() { advanceOrComplete(index); });
+  footer.appendChild(btnSk);
 
   card.appendChild(footer);
   container.innerHTML = '';
@@ -469,147 +262,133 @@ function renderExercise(index) {
 }
 
 function updateProgress(index) {
-  const pct = (index / 3) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `${index} of 3`;
+  document.getElementById('progressFill').style.width = (index / 3 * 100) + '%';
+  document.getElementById('progressLabel').textContent = index + ' of 3';
 }
 
-async function submitCombination(index) {
-  const ta = document.getElementById(`ta-${index}`);
-  const userText = ta.value.trim();
+function submitCombination(index) {
+  var ta = document.getElementById('ta-' + index);
+  var userText = ta.value.trim();
   if (!userText) { ta.focus(); return; }
 
-  const btnSubmit = document.getElementById(`btn-submit-${index}`);
-  btnSubmit.disabled = true;
-  btnSubmit.innerHTML = '<span class="spinner"></span>Evaluating…';
+  var btn = document.getElementById('btn-submit-' + index);
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Evaluating\u2026';
 
-  const data = BANDS[currentBand];
-  const ex = data.exercises[index];
-  const sourcesText = ex.sentences.map((s, i) => `${i+1}. ${s}`).join('\n');
+  var data = BANDS[currentBand];
+  var ex = data.exercises[index];
+  var sourcesText = ex.sentences.map(function(s, i) { return (i+1) + '. ' + s; }).join('\n');
 
-  // Grade-level-appropriate feedback framing
-  const bandLabel = data.label;
-  const gradeContext = currentBand <= 7
-    ? "This is a grades 6–7 exercise. Feedback should be encouraging and name the technique in simple terms. Prioritize affirming what worked over identifying errors, though gentle corrections are appropriate if the combination introduces a new error."
+  var gradeContext = currentBand <= 7
+    ? 'This is a grades 6-7 exercise. Feedback should be encouraging and name the technique in simple terms. Prioritize affirming what worked over identifying errors, though gentle corrections are appropriate if the combination introduces a new error.'
     : currentBand <= 9
-    ? "This is a grades 8–9 exercise. Feedback should be specific about the grammatical technique used and note one thing that works well before noting any issues."
+    ? 'This is a grades 8-9 exercise. Feedback should be specific about the grammatical technique used and note one thing that works well before noting any issues.'
     : currentBand <= 11
-    ? "This is a grades 10–11 exercise. Feedback should name the technique precisely, evaluate the rhetorical effect (not just correctness), and suggest an alternative approach if one is notably stronger."
-    : "This is a grade 12 exercise. Feedback should be analytically rigorous: name every technique used, evaluate the rhetorical choices, compare the combination against alternatives where relevant, and expect the student to articulate their structural decisions.";
+    ? 'This is a grades 10-11 exercise. Feedback should name the technique precisely, evaluate the rhetorical effect (not just correctness), and suggest an alternative approach if one is notably stronger.'
+    : 'This is a grade 12 exercise. Feedback should be analytically rigorous: name every technique used, evaluate the rhetorical choices, compare the combination against alternatives where relevant, and expect the student to articulate their structural decisions.';
 
-  const systemPrompt = `You are a grammar and writing instructor giving feedback on a sentence combining exercise for ${bandLabel}. ${gradeContext}
+  var systemPrompt = 'You are a grammar and writing instructor giving feedback on a sentence combining exercise for ' + data.label + '. ' + gradeContext + '\n\nYour feedback should be specific, pedagogically useful, and brief (3-5 sentences total). Sentence combining has many valid answers—respond to what the student actually wrote.\n\nFormat your response as JSON with exactly these keys:\n{\n  "techniqueName": "short name of the primary technique used",\n  "heading": "one short evaluative phrase",\n  "body": "3-5 sentences of feedback appropriate to the grade level",\n  "hasError": true or false\n}\n\nRespond ONLY with valid JSON. No preamble, no markdown fences.';
 
-Your feedback should be specific, pedagogically useful, and brief (3–5 sentences total). Sentence combining has many valid answers—respond to what the student actually wrote.
+  var userPrompt = 'The exercise asked students to combine these sentences using: ' + ex.technique + '\n\nSource sentences:\n' + sourcesText + '\n\nHint given: "' + ex.hint + '"\n\nStudent\'s combination: "' + userText + '"\n\nEvaluate their combination.';
 
-Format your response as JSON with exactly these keys:
-{
-  "techniqueName": "short name of the primary technique used",
-  "heading": "one short evaluative phrase",
-  "body": "3–5 sentences of feedback appropriate to the grade level",
-  "hasError": true or false
-}
-
-Respond ONLY with valid JSON. No preamble, no markdown fences.`;
-
-  const userPrompt = `The exercise asked students to combine these sentences using: ${ex.technique}
-
-Source sentences:
-${sourcesText}
-
-Hint given: "${ex.hint}"
-
-Student's combination: "${userText}"
-
-Evaluate their combination.`;
-
-  try {
-    const response = await fetch("https://anthropic-proxy.aprilpelt.workers.dev", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }]
-      })
-    });
-
-    if (!response.ok) throw new Error(`API ${response.status}`);
-    const d = await response.json();
-    const raw = d.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    const result = JSON.parse(raw.replace(/```json|```/g, '').trim());
+  fetch(PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
+  })
+  .then(function(response) {
+    if (!response.ok) throw new Error('API ' + response.status);
+    return response.json();
+  })
+  .then(function(d) {
+    var raw = d.content.filter(function(b) { return b.type === 'text'; }).map(function(b) { return b.text; }).join('');
+    var result = JSON.parse(raw.replace(/```json|```/g, '').trim());
     showFeedback(index, result);
-  } catch (err) {
-    showApiError(index);
-  }
+  })
+  .catch(function() { showApiError(index); });
 }
 
 function showFeedback(index, result) {
-  const card = document.getElementById(`card-${index}`);
-  const old = card.querySelector('.feedback');
+  var card = document.getElementById('card-' + index);
+  var old = card.querySelector('.feedback');
   if (old) old.remove();
 
-  const panel = document.createElement('div');
-  panel.className = `feedback fb-${index % 3}`;
-  panel.innerHTML = `
-    <span class="technique-badge">${escHtml(result.techniqueName)}</span>
-    <h4>${escHtml(result.heading)}</h4>
-    ${result.body.split('\n').filter(l => l.trim()).map(l => `<p>${escHtml(l)}</p>`).join('')}
-  `;
+  var panel = document.createElement('div');
+  panel.className = 'feedback fb-' + (index % 3);
+
+  var badge = document.createElement('span');
+  badge.className = 'technique-badge';
+  badge.textContent = result.techniqueName;
+  panel.appendChild(badge);
+
+  var h4 = document.createElement('h4');
+  h4.textContent = result.heading;
+  panel.appendChild(h4);
+
+  result.body.split('\n').filter(function(l) { return l.trim(); }).forEach(function(l) {
+    var p = document.createElement('p');
+    p.textContent = l;
+    panel.appendChild(p);
+  });
+
   card.appendChild(panel);
 
-  const footer = document.getElementById(`footer-${index}`);
+  var footer = document.getElementById('footer-' + index);
   footer.innerHTML = '';
 
-  const btnRetry = document.createElement('button');
-  btnRetry.className = 'btn-retry';
-  btnRetry.textContent = 'Try again';
-  btnRetry.onclick = () => retryExercise(index);
-  footer.appendChild(btnRetry);
+  var btnR = document.createElement('button');
+  btnR.className = 'btn-retry';
+  btnR.textContent = 'Try again';
+  btnR.addEventListener('click', function() { retryExercise(index); });
+  footer.appendChild(btnR);
 
-  const isLast = index >= 2;
-  const btnNext = document.createElement('button');
-  btnNext.className = 'btn-next';
-  btnNext.textContent = isLast ? 'Finish' : 'Next →';
-  btnNext.onclick = () => advanceOrComplete(index);
-  footer.appendChild(btnNext);
+  var btnN = document.createElement('button');
+  btnN.className = 'btn-next';
+  btnN.textContent = index >= 2 ? 'Finish' : 'Next \u2192';
+  btnN.addEventListener('click', function() { advanceOrComplete(index); });
+  footer.appendChild(btnN);
 
-  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 function showApiError(index) {
-  const card = document.getElementById(`card-${index}`);
-  const old = card.querySelector('.feedback, .api-error');
+  var card = document.getElementById('card-' + index);
+  var old = card.querySelector('.feedback, .api-error');
   if (old) old.remove();
-  const err = document.createElement('div');
+  var err = document.createElement('div');
   err.className = 'api-error';
   err.textContent = 'Feedback is temporarily unavailable. Check your connection and try again.';
   card.appendChild(err);
-  const btn = document.getElementById(`btn-submit-${index}`);
+  var btn = document.getElementById('btn-submit-' + index);
   if (btn) { btn.disabled = false; btn.textContent = 'Get feedback'; }
 }
 
 function retryExercise(index) {
-  const card = document.getElementById(`card-${index}`);
-  const panel = card.querySelector('.feedback');
+  var card = document.getElementById('card-' + index);
+  var panel = card.querySelector('.feedback');
   if (panel) panel.remove();
-  const footer = document.getElementById(`footer-${index}`);
+  var footer = document.getElementById('footer-' + index);
   footer.innerHTML = '';
 
-  const btnSubmit = document.createElement('button');
-  btnSubmit.className = 'btn-submit';
-  btnSubmit.textContent = 'Get feedback';
-  btnSubmit.id = `btn-submit-${index}`;
-  btnSubmit.onclick = () => submitCombination(index);
-  footer.appendChild(btnSubmit);
+  var btnS = document.createElement('button');
+  btnS.className = 'btn-submit';
+  btnS.textContent = 'Get feedback';
+  btnS.id = 'btn-submit-' + index;
+  btnS.addEventListener('click', function() { submitCombination(index); });
+  footer.appendChild(btnS);
 
-  const btnSkip = document.createElement('button');
-  btnSkip.className = 'btn-skip';
-  btnSkip.textContent = 'Skip';
-  btnSkip.onclick = () => advanceOrComplete(index);
-  footer.appendChild(btnSkip);
+  var btnSk = document.createElement('button');
+  btnSk.className = 'btn-skip';
+  btnSk.textContent = 'Skip';
+  btnSk.addEventListener('click', function() { advanceOrComplete(index); });
+  footer.appendChild(btnSk);
 
-  const ta = document.getElementById(`ta-${index}`);
+  var ta = document.getElementById('ta-' + index);
   ta.value = '';
   ta.focus();
 }
@@ -618,19 +397,29 @@ function advanceOrComplete(index) {
   currentIndex = index + 1;
   if (currentIndex >= 3) {
     document.getElementById('exerciseContainer').innerHTML = '';
-    const note = document.getElementById('completionNote');
-    note.textContent = BANDS[currentBand].completion;
+    document.getElementById('completionNote').textContent = BANDS[currentBand].completion;
     document.getElementById('completionScreen').classList.add('visible');
     document.getElementById('progressFill').style.width = '100%';
     document.getElementById('progressLabel').textContent = '3 of 3';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top:0, behavior:'smooth'});
   } else {
     renderExercise(currentIndex);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top:0, behavior:'smooth'});
   }
 }
 
-function restartBand() {
-  currentIndex = 0;
-  document.getElementById('completionScreen').classList.remove('visible');
-  rende
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('bandButtons').addEventListener('click', function(e) {
+    var btn = e.target.closest('.band-btn');
+    if (btn) selectBand(parseInt(btn.dataset.band));
+  });
+  document.getElementById('restartBtn').addEventListener('click', function() {
+    currentIndex = 0;
+    document.getElementById('completionScreen').classList.remove('visible');
+    renderExercise(0);
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
