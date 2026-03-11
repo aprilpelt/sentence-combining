@@ -1,416 +1,280 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sentence Combining · Grade Band Practice · EDSC 4850</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --parchment:#f5f0e1;--parchment2:#ede8d5;--border:#d9d3c7;
-    --gold:#c4a24c;--gold-dark:#a07830;--text:#2e2e2e;--muted:#5a5a5a;
-    --rose-bg:#f5e8e8;--rose-bd:#c9a0a0;--rose-dk:#a05050;
-    --orange-bg:#f5ede0;--orange-bd:#c9a878;--orange-dk:#a06830;
-    --yellow-bg:#f5f0d8;--yellow-bd:#c9bf78;--yellow-dk:#908030;
-  }
-  body { background:var(--parchment); font-family:'Source Serif 4',Georgia,serif; font-size:1rem; color:var(--text); line-height:1.65; min-height:100vh; }
-  header { background:var(--parchment2); border-bottom:2px solid var(--gold); padding:1.4rem 2rem 1.1rem; text-align:center; }
-  header h1 { font-family:'Playfair Display',Georgia,serif; font-size:1.5rem; }
-  header p { font-size:0.88rem; color:var(--muted); margin-top:0.3rem; font-style:italic; }
-  main { max-width:780px; margin:0 auto; padding:1.6rem 1.4rem 3rem; }
-  .band-selector { margin-bottom:1.8rem; }
-  .band-selector-label { font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); margin-bottom:0.6rem; }
-  .band-buttons { display:flex; gap:0.5rem; flex-wrap:wrap; }
-  .band-btn { font-family:'Source Serif 4',Georgia,serif; font-size:0.88rem; padding:0.45rem 1rem; border-radius:4px; border:1px solid var(--border); background:var(--parchment2); color:var(--text); cursor:pointer; transition:all 0.15s; }
-  .band-btn:hover { border-color:var(--gold); color:var(--gold-dark); }
-  .band-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; font-weight:600; }
-  .band-intro { background:var(--parchment2); border-left:4px solid var(--gold); border-radius:0 5px 5px 0; padding:0.9rem 1.1rem; margin-bottom:1.5rem; font-size:0.93rem; color:var(--muted); font-style:italic; display:none; }
-  .band-intro.visible { display:block; }
-  .progress-wrap { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
-  .progress-track { flex:1; height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
-  .progress-fill { height:100%; background:var(--gold); border-radius:3px; transition:width 0.4s ease; }
-  .progress-label { font-size:0.8rem; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
-  .exercise-card { border-radius:8px; border:1px solid var(--border); overflow:hidden; margin-bottom:1.2rem; transition:box-shadow 0.2s; }
-  .exercise-card:focus-within { box-shadow:0 2px 12px rgba(196,162,76,0.18); }
-  .card-header { background:var(--parchment2); border-bottom:1px solid var(--border); padding:0.8rem 1.1rem; display:flex; align-items:baseline; gap:0.6rem; }
-  .card-number { font-family:'Playfair Display',serif; font-size:0.76rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold-dark); }
-  .card-technique { font-size:0.81rem; color:var(--muted); font-style:italic; }
-  .card-body { padding:1.1rem 1.1rem 0.7rem; }
-  .source-sentences { background:var(--parchment2); border-left:3px solid var(--gold); border-radius:0 4px 4px 0; padding:0.8rem 1rem; margin-bottom:0.9rem; }
-  .source-sentences p { font-size:0.96rem; margin-bottom:0.35rem; }
-  .source-sentences p:last-child { margin-bottom:0; }
-  .source-sentences p::before { content:attr(data-n) '. '; color:var(--gold-dark); font-weight:600; font-size:0.84rem; }
-  .prompt-label { font-size:0.82rem; font-weight:600; color:var(--muted); margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
-  .hint { font-size:0.82rem; color:var(--muted); font-style:italic; margin-bottom:0.55rem; border-left:2px solid var(--border); padding-left:0.6rem; }
-  textarea { width:100%; min-height:72px; border:1px solid var(--border); border-radius:5px; background:#fffdf8; font-family:'Source Serif 4',Georgia,serif; font-size:0.96rem; color:var(--text); padding:0.65rem 0.8rem; line-height:1.55; resize:vertical; outline:none; transition:border-color 0.2s; }
-  textarea:focus { border-color:var(--gold); }
-  textarea::placeholder { color:#b0a898; font-style:italic; }
-  .card-footer { padding:0.75rem 1.1rem 0.9rem; display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
-  button { font-family:'Source Serif 4',Georgia,serif; font-size:0.87rem; cursor:pointer; border-radius:4px; padding:0.48rem 1rem; border:none; transition:background 0.15s, transform 0.1s; }
-  button:active { transform:translateY(1px); }
-  button:disabled { opacity:0.45; cursor:not-allowed; transform:none; }
-  .btn-submit { background:var(--gold); color:#fff; font-weight:600; }
-  .btn-submit:hover:not(:disabled) { background:var(--gold-dark); }
-  .btn-skip { background:transparent; color:var(--muted); border:1px solid var(--border); }
-  .btn-skip:hover:not(:disabled) { background:var(--parchment2); }
-  .btn-next { background:var(--gold); color:#fff; font-weight:600; }
-  .btn-next:hover:not(:disabled) { background:var(--gold-dark); }
-  .btn-retry { background:transparent; color:var(--gold-dark); border:1px solid var(--gold); }
-  .btn-retry:hover { background:var(--parchment2); }
-  .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:0.3rem; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .feedback { border-radius:0 0 7px 7px; border-top:1px solid var(--border); padding:1rem 1.1rem 1.1rem; font-size:0.93rem; animation:fadeIn 0.3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none} }
-  .feedback h4 { font-family:'Playfair Display',serif; font-size:0.93rem; margin-bottom:0.5rem; }
-  .feedback p { margin-bottom:0.45rem; line-height:1.6; }
-  .feedback p:last-child { margin-bottom:0; }
-  .technique-badge { display:inline-block; font-size:0.74rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; border-radius:3px; padding:0.13rem 0.45rem; margin-bottom:0.55rem; }
-  .fb-0 { background:var(--rose-bg); border-top-color:var(--rose-bd); }
-  .fb-0 h4 { color:var(--rose-dk); }
-  .fb-0 .technique-badge { background:var(--rose-dk); color:#fff; }
-  .fb-1 { background:var(--orange-bg); border-top-color:var(--orange-bd); }
-  .fb-1 h4 { color:var(--orange-dk); }
-  .fb-1 .technique-badge { background:var(--orange-dk); color:#fff; }
-  .fb-2 { background:var(--yellow-bg); border-top-color:var(--yellow-bd); }
-  .fb-2 h4 { color:var(--yellow-dk); }
-  .fb-2 .technique-badge { background:var(--yellow-dk); color:#fff; }
-  .completion { text-align:center; padding:2.2rem 1.4rem; background:var(--parchment2); border:1px solid var(--border); border-radius:8px; display:none; }
-  .completion.visible { display:block; animation:fadeIn 0.4s ease; }
-  .completion h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:0.65rem; color:var(--gold-dark); }
-  .completion p { color:var(--muted); font-size:0.92rem; margin-bottom:0.45rem; }
-  .restart-btn { margin-top:1.1rem; background:var(--gold); color:#fff; font-weight:600; padding:0.55rem 1.3rem; font-size:0.9rem; cursor:pointer; }
-  .restart-btn:hover { background:var(--gold-dark); }
-  .api-error { background:#fdf4f4; border:1px solid #c9a0a0; border-radius:5px; padding:0.7rem 1rem; font-size:0.86rem; color:#a05050; margin:0 1.1rem 0.9rem; }
-  footer { text-align:center; font-size:0.76rem; color:#b0a898; padding:1rem; border-top:1px solid var(--border); margin-top:1rem; }
-</style>
-</head>
-<body>
-<header>
-  <h1>Sentence Combining &middot; Grade Band Practice</h1>
-  <p>EDSC 4850 &middot; Modeling instruction across grade levels &middot; Clemson University</p>
-</header>
-<main>
-  <div class="band-selector">
-    <div class="band-selector-label">Select a grade band</div>
-    <div class="band-buttons" id="bandButtons">
-      <button class="band-btn" data-band="6">Grades 6&ndash;7</button>
-      <button class="band-btn" data-band="8">Grades 8&ndash;9</button>
-      <button class="band-btn" data-band="10">Grades 10&ndash;11</button>
-      <button class="band-btn" data-band="12">Grade 12</button>
+<!-- ============================================================
+     PUNCTUATION BEYOND COMMAS — CANVAS PAGE
+     EDSC 4850 · Grammar Guidelines Module
+     ============================================================ -->
+
+<p><img style="padding-bottom: 10px;" role="presentation" src="https://clemson.instructure.com/courses/285834/files/29332072/preview" alt="" width="100%" height="100%" data-api-endpoint="https://clemson.instructure.com/api/v1/courses/285834/files/29332072" data-api-returntype="File" /></p>
+
+<!-- INTRO -->
+<p>Commas are covered in depth elsewhere in this module. This page focuses on the four marks that secondary students most consistently misuse or avoid entirely: the <strong>semicolon</strong>, the <strong>colon</strong>, the <strong>em dash</strong>, and the <strong>hyphen</strong>. These marks are not interchangeable with each other or with the comma—each has a specific structural function, and using the wrong one (or avoiding all of them) limits the range of sentence structures available to a writer.</p>
+
+<p>Students often avoid these marks because they're uncertain about the rules. The goal of this page is to make those rules concrete enough that students can use each mark deliberately—and to show how each one creates effects that no other mark can replicate.</p>
+
+<p><img style="padding-bottom: 10px;" role="presentation" src="https://clemson.instructure.com/courses/285834/files/29332089/preview" alt="" data-api-endpoint="https://clemson.instructure.com/api/v1/courses/285834/files/29332089" data-api-returntype="File" /></p>
+
+<h3>The Semicolon</h3>
+
+<!-- Semicolons — rose -->
+<details style="background-color:#f5e8e8; border:1px solid #c9a0a0; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Semicolons — Joining and Separating</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p>A semicolon has two uses: joining two closely related independent clauses without a conjunction, and separating items in a complex list where the items themselves contain commas. It is stronger than a comma and weaker than a period.</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 1 — Joining independent clauses</p>
+    <p>A semicolon between two independent clauses signals that the ideas are closely related—more so than a period would suggest—but without naming the relationship the way a conjunction would. Use it when the connection is so clear it doesn't need to be stated.</p>
+
+    <p style="font-style:italic; color:#444;">&#10003; "AI tools can generate grammatically fluent text<strong>;</strong> they cannot verify whether that text is accurate."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Cognitive offloading reduces short-term effort<strong>;</strong> it may also reduce long-term skill development."</p>
+
+    <p>When a conjunctive adverb (<em>however, therefore, thus, consequently, moreover, nevertheless, furthermore</em>) follows the semicolon, the adverb is followed by a comma:</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The output sounded authoritative<strong>; however,</strong> it contained three factual errors."<br />
+    &#10003; "AI use is increasing among students<strong>; therefore,</strong> academic integrity policies need to be updated."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">&#10005; Common errors</p>
+    <p style="font-style:italic; color:#444;">"AI tools are useful<strong>;</strong> <strong>but</strong> they require critical evaluation." — Don't use a semicolon before a coordinating conjunction (FANBOYS). Use a comma instead: "AI tools are useful<strong>,</strong> but they require critical evaluation."</p>
+    <p style="font-style:italic; color:#444;">"AI tools are useful<strong>;</strong> <strong>requiring critical evaluation from users</strong>." — A semicolon must be followed by an independent clause, not a phrase. The second element here is a participial phrase.</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 2 — Separating complex list items</p>
+    <p>When the items in a series themselves contain commas, using commas between items creates confusion about where one item ends and the next begins. A semicolon between items makes the boundaries clear.</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The study included participants from Austin, Texas<strong>;</strong> Portland, Oregon<strong>;</strong> and Burlington, Vermont."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The researchers examined three models: GPT-4, which was trained on internet text<strong>;</strong> Gemini, which was trained on a proprietary dataset<strong>;</strong> and Claude, which was trained with a focus on constitutional alignment."</p>
+
+    <p style="background-color:#fdf4f4; border-left:4px solid #a05050; padding:0.75em 1em; margin:1em 0 0 0;"><strong>Teaching tip:</strong> Students often avoid semicolons because they're unsure of the rule. The clearest single test: can you replace the semicolon with a period and have two complete sentences? If yes, the semicolon is probably correct (assuming no FANBOYS follows it). If no, something else is needed. The period test is faster and more reliable than asking students to diagram the sentence.</p>
+  </div>
+</details>
+
+<h3>The Colon</h3>
+
+<!-- Colons — orange -->
+<details style="background-color:#f5ede0; border:1px solid #c9a878; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Colons — Introducing and Announcing</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p>A colon introduces what follows—a list, a quotation, an explanation, or an appositive—by signaling that what comes after it completes, illustrates, or elaborates on what came before. The key rule: <strong>what comes before the colon must be a complete independent clause.</strong></p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 1 — Introducing a list</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Critical AI literacy involves three core competencies<strong>:</strong> source verification, output evaluation, and bias recognition."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Gerlich's study found three significant patterns<strong>:</strong> higher AI use correlated with lower critical thinking scores, younger participants showed greater AI dependence, and higher educational attainment moderated the effect."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 2 — Introducing an explanation or elaboration</p>
+    <p>The colon can replace a phrase like <em>that is, in other words,</em> or <em>specifically</em> to introduce an explanation of the preceding clause.</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Chiang's argument has a counterintuitive implication<strong>:</strong> the more fluent an AI output sounds, the less detectable its factual errors are."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The blurry JPEG metaphor captures something specific about hallucinations<strong>:</strong> they are not random errors but artifacts of compression—statistically plausible reconstructions of missing information."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 3 — Introducing a formal quotation</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Roe et al. define Critical AI Literacy precisely<strong>:</strong> 'the ability to critically analyse and engage with AI systems by understanding their technical foundations, societal implications, and embedded power structures.'"</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">&#10005; Common errors</p>
+    <p style="font-style:italic; color:#444;">"The three competencies are<strong>:</strong> source verification, output evaluation, and bias recognition." — The colon interrupts a linking verb and its complement. Remove the colon: "The three competencies are source verification, output evaluation, and bias recognition."</p>
+    <p style="font-style:italic; color:#444;">"Students need to<strong>:</strong> verify sources, evaluate outputs, and recognize bias." — A colon cannot follow an infinitive. Remove it or restructure: "Students need to do three things: verify sources, evaluate outputs, and recognize bias."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Capitalization after a colon</p>
+    <p>Style guides differ slightly here. <strong>APA and Chicago</strong> capitalize the first word after a colon if what follows is a complete independent clause. <strong>MLA</strong> does not capitalize unless the word is a proper noun. In secondary ELA, either convention is acceptable if applied consistently—what matters is that students know a convention exists and apply it deliberately.</p>
+
+    <p style="background-color:#fdf5eb; border-left:4px solid #a06830; padding:0.75em 1em; margin:1em 0 0 0;"><strong>Teaching tip:</strong> The simplest way to teach the colon is the "complete sentence before" rule: cover everything after the colon and read what remains. Does it form a complete sentence? If yes, the colon is probably correct. If no—if there's a linking verb with no complement, or an infinitive with no object—the colon needs to go. This test catches the two most common colon errors immediately.</p>
+  </div>
+</details>
+
+<h3>The Em Dash</h3>
+
+<!-- Em dash — yellow -->
+<details style="background-color:#f5f0d8; border:1px solid #c9bf78; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Em Dashes — Interrupting and Emphasizing</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p>The em dash (—) is the longest of the three dashes. It is more emphatic than a comma and more informal than a colon or parentheses. It signals an interruption, a sharp pivot, or a dramatic elaboration. Used sparingly, it creates energy. Used constantly, it becomes a crutch that replaces the structural thinking that a colon or comma would require.</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 1 — Setting off an interruption or appositive (in place of commas or parentheses)</p>
+    <p>Like commas and parentheses, dashes can set off nonessential material. The choice among the three signals different degrees of emphasis: commas are neutral, parentheses de-emphasize, dashes emphasize.</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Chiang's argument—that LLMs are lossy compression algorithms rather than reasoning systems—has significant implications for writing instruction."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The output sounded confident—disturbingly so—but contained three factual errors."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 2 — Introducing a list or explanation with added emphasis</p>
+    <p>Similar to the colon, but more dramatic. Use when the introduction is already emphatic or when the list is itself being foregrounded.</p>
+    <p style="font-style:italic; color:#444;">&#10003; "Three things make an AI output dangerous—fluency, confidence, and plausibility—because they are the qualities readers use as proxies for accuracy."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The model did what LLMs always do—it interpolated."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 3 — Marking an abrupt interruption or shift</p>
+    <p style="font-style:italic; color:#444;">&#10003; "The student submitted the essay—then discovered it had been generated entirely by AI."</p>
+    <p style="font-style:italic; color:#444;">&#10003; "It was fluent, polished, convincingly organized—and completely fabricated."</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Forming the em dash</p>
+    <p>In most word processors, two hyphens (--) typed without spaces will autocorrect to an em dash. In HTML, it is the entity <code>&amp;mdash;</code> or the Unicode character —. In typed and handwritten work, two hyphens with no spaces on either side are the standard substitute.</p>
+    <p>Style guides differ on spacing: AP style uses spaces on both sides of the em dash; Chicago and MLA use no spaces. Follow whichever style guide your course or school uses, and apply it consistently.</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">&#10005; Overuse</p>
+    <p>The em dash loses its punch when used in every sentence. If a student's draft has more than one or two em dashes per paragraph, ask them to replace each one with the mark that best fits the structural function—comma, colon, parentheses, or semicolon—and reserve the dash for moments where the interruption or emphasis genuinely earns it.</p>
+
+    <p style="background-color:#fafaec; border-left:4px solid #908030; padding:0.75em 1em; margin:1em 0 0 0;"><strong>Teaching tip:</strong> The em dash is the most rhetorically interesting mark in this set, and students who discover it often overuse it for a period before calibrating. That's fine—let the overcorrection happen, then teach the calibration. A student who overuses em dashes has understood that punctuation does rhetorical work; that's the harder lesson. The specific usage rules are easier to refine once the underlying insight is there.</p>
+  </div>
+</details>
+
+<h3>The Hyphen</h3>
+
+<!-- Hyphen — green -->
+<details style="background-color:#e8f0e8; border:1px solid #90b890; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Hyphens — Compounding and Dividing</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p>The hyphen (-) is the shortest of the three dash-family marks and serves entirely different functions from the em dash. It connects parts of compound words and modifiers; it does not interrupt or set off elements the way a dash does. The rules for hyphens are more fluid than for the other marks—conventions vary by style guide and evolve over time—but a few reliable patterns cover most cases students encounter.</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 1 — Compound modifiers before a noun</p>
+    <p>When two or more words function together as a single modifier before a noun, hyphenate them. When the same words come after the noun, they usually don't need a hyphen.</p>
+    <p style="font-style:italic; color:#444;">&#10003; "an <strong>AI-generated</strong> essay" — hyphenated before the noun<br />
+    &#10003; "an essay that was <strong>AI generated</strong>" — no hyphen after the noun<br />
+    &#10003; "a <strong>well-documented</strong> problem" → "a problem that is <strong>well documented</strong>"<br />
+    &#10003; "a <strong>large-scale</strong> study" → "a study conducted on a <strong>large scale</strong>"</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 2 — Compound nouns</p>
+    <p>Many compound nouns are hyphenated; many others are written as one word or two. Usage evolves—when in doubt, check a current dictionary for the standard form.</p>
+    <p style="font-style:italic; color:#444;">Hyphenated: <em>self-regulation, follow-up, check-in, sign-in, trade-off</em><br />
+    One word: <em>proofreading, overreliance, dataset, chatbot, feedback</em><br />
+    Two words: <em>critical thinking, writing process, source verification</em></p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 3 — Prefixes</p>
+    <p>Most prefixes attach directly without a hyphen (<em>overreliance, preservice, nonstandardized, multiliterate</em>). Hyphens are used with prefixes when the prefix precedes a proper noun or numeral (<em>pre-AI, non-Western, post-1990</em>), or when the unhyphenated form would cause confusion (<em>re-cover</em> vs. <em>recover</em>, <em>re-create</em> vs. <em>recreate</em>).</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Use 4 — Numbers and fractions</p>
+    <p style="font-style:italic; color:#444;">&#10003; "twenty-one through ninety-nine when spelled out"<br />
+    &#10003; "a <strong>two-thirds</strong> majority" — fraction used as modifier<br />
+    &#10003; "two thirds of the outputs" — fraction used as noun phrase, no hyphen</p>
+
+    <p style="font-weight:bold; margin-bottom:4px;">Common errors</p>
+    <p style="font-style:italic; color:#444;">&#10005; "an AI generated essay" — missing hyphen in compound modifier before noun<br />
+    &#10005; "a high school teacher's well-documented concerns" — <em>high school</em> is a compound noun, not a compound modifier here; no hyphen needed<br />
+    &#10005; "self regulation" — established compound noun requires a hyphen</p>
+
+    <p style="background-color:#f0f7f0; border-left:4px solid #407040; padding:0.75em 1em; margin:1em 0 0 0;"><strong>Teaching tip:</strong> The compound modifier rule (hyphenate before the noun, not after) is the one hyphen rule worth teaching explicitly at the secondary level—it covers the majority of hyphen decisions students face in academic writing. The others are best handled as needed when they arise in student drafts, since dictionary conventions change and no single rule covers all cases.</p>
+  </div>
+</details>
+
+<!-- Quick reference — teal -->
+<details style="background-color:#e0f0f0; border:1px solid #78b8b8; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Quick Reference — Choosing Among the Four Marks</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p>These marks are not interchangeable. Each has a specific job. When you're unsure which to use, ask which function you need:</p>
+
+    <div style="font-size:0; margin:1em 0;">
+      <div style="display:inline-block; font-size:1rem; width:47%; vertical-align:top; background-color:#e8f6f6; border:1px solid #78b8b8; border-radius:6px; padding:14px 18px; box-sizing:border-box; margin-right:2%;">
+        <p style="font-weight:bold; margin:0 0 8px 0;">Semicolon ;</p>
+        <ul style="margin:0; padding-left:1.2em; font-size:0.93em;">
+          <li>Join two closely related independent clauses without a conjunction</li>
+          <li>Separate complex list items that contain internal commas</li>
+          <li><em>Never</em> before a coordinating conjunction (FANBOYS)</li>
+          <li><em>Never</em> before a phrase (only before an independent clause)</li>
+        </ul>
+      </div><div style="display:inline-block; font-size:1rem; width:47%; vertical-align:top; background-color:#e8f6f6; border:1px solid #78b8b8; border-radius:6px; padding:14px 18px; box-sizing:border-box; margin-left:2%;">
+        <p style="font-weight:bold; margin:0 0 8px 0;">Colon :</p>
+        <ul style="margin:0; padding-left:1.2em; font-size:0.93em;">
+          <li>Introduce a list, explanation, or quotation</li>
+          <li>Must follow a complete independent clause</li>
+          <li><em>Never</em> after a linking verb (<em>are:</em>) or an infinitive (<em>to:</em>)</li>
+          <li>More formal than a dash; less emphatic</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="font-size:0; margin:1em 0 0 0;">
+      <div style="display:inline-block; font-size:1rem; width:47%; vertical-align:top; background-color:#e8f6f6; border:1px solid #78b8b8; border-radius:6px; padding:14px 18px; box-sizing:border-box; margin-right:2%;">
+        <p style="font-weight:bold; margin:0 0 8px 0;">Em Dash —</p>
+        <ul style="margin:0; padding-left:1.2em; font-size:0.93em;">
+          <li>Set off interruptions, appositives, or asides with emphasis</li>
+          <li>Introduce a list or explanation dramatically</li>
+          <li>Mark an abrupt shift or interruption</li>
+          <li>Use sparingly; overuse drains its rhetorical power</li>
+        </ul>
+      </div><div style="display:inline-block; font-size:1rem; width:47%; vertical-align:top; background-color:#e8f6f6; border:1px solid #78b8b8; border-radius:6px; padding:14px 18px; box-sizing:border-box; margin-left:2%;">
+        <p style="font-weight:bold; margin:0 0 8px 0;">Hyphen -</p>
+        <ul style="margin:0; padding-left:1.2em; font-size:0.93em;">
+          <li>Join compound modifiers before a noun</li>
+          <li>Form established compound nouns and words</li>
+          <li>Attach certain prefixes to proper nouns or to avoid ambiguity</li>
+          <li>Write out numbers 21–99 and spelled-out fractions used as modifiers</li>
+        </ul>
+      </div>
     </div>
   </div>
-  <div class="band-intro" id="bandIntro"></div>
-  <div id="progressArea" style="display:none;">
-    <div class="progress-wrap">
-      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-      <span class="progress-label" id="progressLabel">0 of 3</span>
-    </div>
+</details>
+
+<p><img style="padding-bottom: 10px;" role="presentation" src="https://clemson.instructure.com/courses/285834/files/29332089/preview" alt="" data-api-endpoint="https://clemson.instructure.com/api/v1/courses/285834/files/29332089" data-api-returntype="File" /></p>
+
+<h3>Self-Check: Identify and Correct</h3>
+
+<p>Each item contains an error involving one of the four marks covered on this page. Identify the error and correct it.</p>
+
+<!-- SC 1 — rose -->
+<details style="background-color:#f5e8e8; border:1px solid #c9a0a0; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Item 1</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p style="font-style:italic; color:#333;">"The study had three major limitations; small sample size, limited geographic diversity, and a short data collection window."</p>
+    <details style="margin-top:1em; background-color:#fdf4f4; border:1px solid #c9a0a0; border-radius:4px;">
+      <summary style="padding:0.5em 0.75em; cursor:pointer; font-size:0.95em; color:#a05050;">Show answer</summary>
+      <div style="padding:0.5em 0.75em 0.75em;">
+        <p><strong>Error:</strong> A semicolon is used where a colon is needed. The semicolon must be followed by an independent clause. What follows here is a list—the correct mark to introduce a list from a complete independent clause is a colon.</p>
+        <p><strong>Revision:</strong> "The study had three major limitations<strong>:</strong> small sample size, limited geographic diversity, and a short data collection window."</p>
+      </div>
+    </details>
   </div>
-  <div id="exerciseContainer"></div>
-  <div class="completion" id="completionScreen">
-    <h2>All three done.</h2>
-    <p id="completionNote"></p>
-    <p>Try another grade band to see how the same techniques scale up or down in complexity.</p>
-    <button class="restart-btn" id="restartBtn">Retry this band</button>
+</details>
+
+<!-- SC 2 — orange -->
+<details style="background-color:#f5ede0; border:1px solid #c9a878; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Item 2</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p style="font-style:italic; color:#333;">"AI generated text can be: fluent, confident, and factually wrong at the same time."</p>
+    <details style="margin-top:1em; background-color:#fdf5eb; border:1px solid #c9a878; border-radius:4px;">
+      <summary style="padding:0.5em 0.75em; cursor:pointer; font-size:0.95em; color:#a06830;">Show answer</summary>
+      <div style="padding:0.5em 0.75em 0.75em;">
+        <p><strong>Errors:</strong> Two errors. First, the colon interrupts a linking verb and its complements—the colon cannot follow <em>can be</em>. Second, <em>AI generated</em> is a compound modifier before a noun and needs a hyphen.</p>
+        <p><strong>Revision:</strong> "<strong>AI-generated</strong> text can be fluent, confident, and factually wrong at the same time."</p>
+        <p>If a colon is desired for emphasis: "<strong>AI-generated</strong> text can achieve something paradoxical<strong>:</strong> sounding fluent, confident, and factually wrong simultaneously."</p>
+      </div>
+    </details>
   </div>
-</main>
-<footer>Questions? <a href="/cdn-cgi/l/email-protection#117061747d6551727d747c627e7f3f747564" style="color:var(--gold-dark);"><span class="__cf_email__" data-cfemail="ec8d9c898098ac8f8089819f8382c2898899">[email&#160;protected]</span></a></footer>
+</details>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const PROXY = 'https://anthropic-proxy.aprilpelt.workers.dev';
+<!-- SC 3 — yellow -->
+<details style="background-color:#f5f0d8; border:1px solid #c9bf78; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Item 3</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p style="font-style:italic; color:#333;">"The model performed well on structured tasks; but struggled significantly with open-ended reasoning questions."</p>
+    <details style="margin-top:1em; background-color:#fafaec; border:1px solid #c9bf78; border-radius:4px;">
+      <summary style="padding:0.5em 0.75em; cursor:pointer; font-size:0.95em; color:#908030;">Show answer</summary>
+      <div style="padding:0.5em 0.75em 0.75em;">
+        <p><strong>Error:</strong> A semicolon before a coordinating conjunction (<em>but</em>). A semicolon must be followed by an independent clause; what follows here is not independent—<em>but struggled significantly</em> has no subject. The semicolon should be a comma.</p>
+        <p><strong>Revision:</strong> "The model performed well on structured tasks<strong>,</strong> but struggled significantly with open-ended reasoning questions."</p>
+        <p><strong>Note:</strong> Alternatively, this could be rewritten as a compound sentence: "The model performed well on structured tasks<strong>, but</strong> it struggled significantly with open-ended reasoning questions."</p>
+      </div>
+    </details>
+  </div>
+</details>
 
-const BANDS = {
-  6: {
-    label:'Grades 6-7',
-    intro:'These exercises are designed for students who are learning to use conjunctions and simple combining strategies for the first time. Sentences are short, vocabulary is accessible, and the techniques are limited to coordination and simple subordination. As a preservice teacher, try each exercise as a student would—then think about how you\'d introduce the technique to a class.',
-    completion:'At grades 6-7, the goal is for students to hear what combined sentences sound like and to have a name for what they did. Even naming "I used because" is meaningful progress at this level.',
-    exercises:[
-      { label:'Exercise 1', technique:'Coordination with and / but', sentences:['AI can answer questions very quickly.','AI sometimes gets the answer wrong.'], hint:'Join these two sentences using but or yet to show the contrast between them. Think about which word best captures the relationship.' },
-      { label:'Exercise 2', technique:'Subordination with because', sentences:['You should always check AI answers.','AI can make things up.'], hint:'Use because to connect these two ideas. Try it two ways: starting with because, and putting because in the middle. Which version do you prefer?' },
-      { label:'Exercise 3', technique:'Subordination with when / if', sentences:['You use an AI chatbot for homework.','You are responsible for checking whether the answers are accurate.'], hint:'Use when or if to connect these sentences. The first sentence will become a subordinate clause that sets up the second one.' }
-    ]
-  },
-  8: {
-    label:'Grades 8-9',
-    intro:'At grades 8-9, exercises introduce relative clauses and appositives, which require students to embed one idea inside another rather than just joining two ideas side by side. Source sentences are longer and involve more abstract concepts. The goal is for students to practice nesting information efficiently.',
-    completion:'At grades 8-9, students are ready to embed information inside sentences rather than just stringing ideas together. The relative clause and appositive are the two structures that most immediately improve writing density and sophistication.',
-    exercises:[
-      { label:'Exercise 1', technique:'Coordination with contrast', sentences:['Social media algorithms learn what content keeps you engaged.','They do not know whether that content is accurate.','They do not know whether it is good for you.'], hint:'Try combining all three sentences into one. Use a coordinating conjunction to handle the contrast, and consider how to fold the last two sentences together efficiently.' },
-      { label:'Exercise 2', technique:'Relative clause with who / which', sentences:['Ted Chiang is a science fiction writer.','He argued that AI tools are like blurry photographs of the internet.','His argument helps explain why AI sometimes invents facts.'], hint:'Use who or whose to fold information about Ted Chiang into a single sentence. You probably won\'t need all three source sentences—use what\'s most important.' },
-      { label:'Exercise 3', technique:'Appositive phrase', sentences:['Cognitive offloading means letting a tool do your thinking for you.','Cognitive offloading may reduce critical thinking skills over time.','A researcher named Gerlich studied this in 2025.'], hint:'Use an appositive to embed the definition of cognitive offloading directly into a sentence about Gerlich\'s research, so you don\'t have to define and report separately.' }
-    ]
-  },
-  10: {
-    label:'Grades 10-11',
-    intro:'At grades 10-11, exercises focus on participial phrases and the rhetorical choices involved in coordination and subordination. Students at this level are ready to think not just about whether a combination is grammatically correct but about what effect it creates—what it emphasizes, what it subordinates, and why those choices matter for argument.',
-    completion:'At grades 10-11, the most important shift is from "did I combine correctly?" to "what does this combination do?" Students who can articulate the rhetorical effect of a structural choice are developing real writer\'s awareness.',
-    exercises:[
-      { label:'Exercise 1', technique:'Participial phrase', sentences:['Roe and colleagues applied Conceptual Metaphor Theory.','They compared generative AI to synthetic plastic.','Both are useful, ubiquitous, and potentially toxic to their environments.'], hint:'Open your sentence with a participial phrase (a verb form ending in -ing) that shows how the researchers approached their argument. Then complete the sentence with their central claim.' },
-      { label:'Exercise 2', technique:'Subordination to show cause and consequence', sentences:['AI tools produce text that sounds fluent and authoritative.','Readers may not notice when the content contains errors.','Fluency is not the same thing as accuracy.'], hint:'Use subordination to show the causal chain here: what is it about fluency that creates the risk? Try beginning with because or since, or try using although to introduce a concession.' },
-      { label:'Exercise 3', technique:'Free choice', sentences:['Writing a sentence forces a writer to commit to a claim.','Generating a sentence with AI does not require the same commitment.','The cognitive work of drafting is where much of the thinking happens.'], hint:'No prescribed technique this time. Combine these sentences in whatever way you think best serves the meaning. Be prepared to name what you did and explain why you made that choice.' }
-    ]
-  },
-  12: {
-    label:'Grade 12',
-    intro:'At grade 12, exercises introduce the semicolon and conjunctive adverb as tools for signaling logical relationships between independent clauses, and they ask students to make and defend complex structural choices. The source sentences are more abstract, the relationships between ideas are more nuanced, and the expectation is that students can articulate not just what they did but why.',
-    completion:'At grade 12, sentence combining becomes a revision strategy as much as a grammar exercise. Students who can combine at this level are developing the kind of syntactic control that shows up in AP and college writing.',
-    exercises:[
-      { label:'Exercise 1', technique:'Semicolon with conjunctive adverb', sentences:['AI tools can dramatically reduce the effort required to produce a first draft.','The struggle of drafting is where a great deal of the learning happens.','Removing that struggle may reduce writing skill development over time.'], hint:'Use a semicolon—either alone or with a conjunctive adverb like however, therefore, or consequently—to connect two of these ideas. Choose the conjunctive adverb that most precisely names the logical relationship you want to signal.' },
-      { label:'Exercise 2', technique:'Parallel structure across clauses', sentences:['AI tools threaten to make writing easier.','AI tools threaten to make reading harder.','AI tools threaten to make the distinction between the two less meaningful.'], hint:'These three ideas are naturally parallel. Combine them into a single sentence that makes the parallel structure visible and emphatic. Consider whether coordination or a different structure best serves the rhythm you want.' },
-      { label:'Exercise 3', technique:'Free choice — maximum complexity', sentences:['Chiang argues that AI is a compression algorithm, not a reasoning system.','Roe and colleagues argue that AI-generated content is like digital plastic.','Both metaphors suggest that AI outputs require more critical evaluation, not less, as these tools become more capable.'], hint:'Combine these three ideas into one or two sentences of your own design. You might subordinate one argument to another, use an appositive to handle one of the attributions, or use parallel structure to align the two metaphors. Name every technique you used.' }
-    ]
-  }
-};
+<!-- SC 4 — green -->
+<details style="background-color:#e8f0e8; border:1px solid #90b890; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Item 4</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p style="font-style:italic; color:#333;">"Chiang's metaphor—that LLMs are blurry JPEGs of the web captures something precise about hallucinations—they are not random errors but artifacts of compression."</p>
+    <details style="margin-top:1em; background-color:#f0f7f0; border:1px solid #90b890; border-radius:4px;">
+      <summary style="padding:0.5em 0.75em; cursor:pointer; font-size:0.95em; color:#407040;">Show answer</summary>
+      <div style="padding:0.5em 0.75em 0.75em;">
+        <p><strong>Error:</strong> The first em dash opens a parenthetical but is not closed before the second dash begins a new function (introducing an elaboration). The sentence has two dashes but only one opening dash where two are needed for the parenthetical, with the elaboration handled separately.</p>
+        <p><strong>Revision A (paired dashes for the appositive, colon for the elaboration):</strong> "Chiang's metaphor—that LLMs are blurry JPEGs of the web—captures something precise about hallucinations: they are not random errors but artifacts of compression."</p>
+        <p><strong>Revision B (recast to avoid ambiguity):</strong> "Chiang's metaphor captures something precise about hallucinations. In describing LLMs as blurry JPEGs of the web, he implies that hallucinations are not random errors but artifacts of compression."</p>
+      </div>
+    </details>
+  </div>
+</details>
 
-let currentBand = null;
-let currentIndex = 0;
+<!-- SC 5 — teal -->
+<details style="background-color:#e0f0f0; border:1px solid #78b8b8; border-radius:6px; padding:0; margin:1em 0;">
+  <summary style="padding:0.75em 1em; cursor:pointer; font-size:1.05em;">Item 5</summary>
+  <div style="padding:0.5em 1em 1em;">
+    <p style="font-style:italic; color:#333;">"The researchers studied participants from three cities: Austin, Texas, Portland, Oregon, and Burlington, Vermont, and found that AI use correlated with lower self reported critical thinking scores."</p>
+    <details style="margin-top:1em; background-color:#e8f6f6; border:1px solid #78b8b8; border-radius:4px;">
+      <summary style="padding:0.5em 0.75em; cursor:pointer; font-size:0.95em; color:#307878;">Show answer</summary>
+      <div style="padding:0.5em 0.75em 0.75em;">
+        <p><strong>Errors:</strong> Two errors. First, the city-state list uses commas both between list items and between city and state, making the list boundaries invisible—semicolons are needed between items. Second, <em>self reported</em> is a compound modifier before a noun and needs a hyphen.</p>
+        <p><strong>Revision:</strong> "The researchers studied participants from three cities: Austin, Texas<strong>;</strong> Portland, Oregon<strong>;</strong> and Burlington, Vermont, and found that AI use correlated with lower <strong>self-reported</strong> critical thinking scores."</p>
+      </div>
+    </details>
+  </div>
+</details>
 
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function selectBand(band) {
-  currentBand = band;
-  currentIndex = 0;
-  document.querySelectorAll('.band-btn').forEach(function(b) {
-    b.classList.toggle('active', parseInt(b.dataset.band) === band);
-  });
-  var data = BANDS[band];
-  var intro = document.getElementById('bandIntro');
-  intro.textContent = data.intro;
-  intro.classList.add('visible');
-  document.getElementById('progressArea').style.display = 'block';
-  document.getElementById('completionScreen').classList.remove('visible');
-  renderExercise(0);
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function renderExercise(index) {
-  var data = BANDS[currentBand];
-  var ex = data.exercises[index];
-  var container = document.getElementById('exerciseContainer');
-
-  var card = document.createElement('div');
-  card.className = 'exercise-card';
-  card.id = 'card-' + index;
-
-  var hdr = document.createElement('div');
-  hdr.className = 'card-header';
-  var num = document.createElement('span');
-  num.className = 'card-number';
-  num.textContent = ex.label;
-  var tech = document.createElement('span');
-  tech.className = 'card-technique';
-  tech.textContent = ex.technique;
-  hdr.appendChild(num);
-  hdr.appendChild(tech);
-  card.appendChild(hdr);
-
-  var body = document.createElement('div');
-  body.className = 'card-body';
-
-  var sources = document.createElement('div');
-  sources.className = 'source-sentences';
-  ex.sentences.forEach(function(s, i) {
-    var p = document.createElement('p');
-    p.dataset.n = i + 1;
-    p.textContent = s;
-    sources.appendChild(p);
-  });
-  body.appendChild(sources);
-
-  var pl = document.createElement('div');
-  pl.className = 'prompt-label';
-  pl.textContent = 'Your combination';
-  body.appendChild(pl);
-
-  var hint = document.createElement('div');
-  hint.className = 'hint';
-  hint.textContent = ex.hint;
-  body.appendChild(hint);
-
-  var ta = document.createElement('textarea');
-  ta.id = 'ta-' + index;
-  ta.placeholder = 'Type your combined sentence here\u2026';
-  ta.setAttribute('aria-label', 'Your sentence combination for exercise ' + (index + 1));
-  body.appendChild(ta);
-  card.appendChild(body);
-
-  var footer = document.createElement('div');
-  footer.className = 'card-footer';
-  footer.id = 'footer-' + index;
-
-  var btnS = document.createElement('button');
-  btnS.className = 'btn-submit';
-  btnS.textContent = 'Get feedback';
-  btnS.id = 'btn-submit-' + index;
-  btnS.addEventListener('click', function() { submitCombination(index); });
-  footer.appendChild(btnS);
-
-  var btnSk = document.createElement('button');
-  btnSk.className = 'btn-skip';
-  btnSk.textContent = 'Skip';
-  btnSk.addEventListener('click', function() { advanceOrComplete(index); });
-  footer.appendChild(btnSk);
-
-  card.appendChild(footer);
-  container.innerHTML = '';
-  container.appendChild(card);
-  updateProgress(index);
-  ta.focus();
-}
-
-function updateProgress(index) {
-  document.getElementById('progressFill').style.width = (index / 3 * 100) + '%';
-  document.getElementById('progressLabel').textContent = index + ' of 3';
-}
-
-function submitCombination(index) {
-  var ta = document.getElementById('ta-' + index);
-  var userText = ta.value.trim();
-  if (!userText) { ta.focus(); return; }
-
-  var btn = document.getElementById('btn-submit-' + index);
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Evaluating\u2026';
-
-  var data = BANDS[currentBand];
-  var ex = data.exercises[index];
-  var sourcesText = ex.sentences.map(function(s, i) { return (i+1) + '. ' + s; }).join('\n');
-
-  var gradeContext = currentBand <= 7
-    ? 'This is a grades 6-7 exercise. Feedback should be encouraging and name the technique in simple terms. Prioritize affirming what worked over identifying errors, though gentle corrections are appropriate if the combination introduces a new error.'
-    : currentBand <= 9
-    ? 'This is a grades 8-9 exercise. Feedback should be specific about the grammatical technique used and note one thing that works well before noting any issues.'
-    : currentBand <= 11
-    ? 'This is a grades 10-11 exercise. Feedback should name the technique precisely, evaluate the rhetorical effect (not just correctness), and suggest an alternative approach if one is notably stronger.'
-    : 'This is a grade 12 exercise. Feedback should be analytically rigorous: name every technique used, evaluate the rhetorical choices, compare the combination against alternatives where relevant, and expect the student to articulate their structural decisions.';
-
-  var systemPrompt = 'You are a grammar and writing instructor giving feedback on a sentence combining exercise for ' + data.label + '. ' + gradeContext + '\n\nYour feedback should be specific, pedagogically useful, and brief (3-5 sentences total). Sentence combining has many valid answers—respond to what the student actually wrote.\n\nFormat your response as JSON with exactly these keys:\n{\n  "techniqueName": "short name of the primary technique used",\n  "heading": "one short evaluative phrase",\n  "body": "3-5 sentences of feedback appropriate to the grade level",\n  "hasError": true or false\n}\n\nRespond ONLY with valid JSON. No preamble, no markdown fences.';
-
-  var userPrompt = 'The exercise asked students to combine these sentences using: ' + ex.technique + '\n\nSource sentences:\n' + sourcesText + '\n\nHint given: "' + ex.hint + '"\n\nStudent\'s combination: "' + userText + '"\n\nEvaluate their combination.';
-
-  fetch(PROXY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5',
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }]
-    })
-  })
-  .then(function(response) {
-    if (!response.ok) throw new Error('API ' + response.status);
-    return response.json();
-  })
-  .then(function(d) {
-    var raw = d.content.filter(function(b) { return b.type === 'text'; }).map(function(b) { return b.text; }).join('');
-    var result = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    showFeedback(index, result);
-  })
-  .catch(function() { showApiError(index); });
-}
-
-function showFeedback(index, result) {
-  var card = document.getElementById('card-' + index);
-  var old = card.querySelector('.feedback');
-  if (old) old.remove();
-
-  var panel = document.createElement('div');
-  panel.className = 'feedback fb-' + (index % 3);
-
-  var badge = document.createElement('span');
-  badge.className = 'technique-badge';
-  badge.textContent = result.techniqueName;
-  panel.appendChild(badge);
-
-  var h4 = document.createElement('h4');
-  h4.textContent = result.heading;
-  panel.appendChild(h4);
-
-  result.body.split('\n').filter(function(l) { return l.trim(); }).forEach(function(l) {
-    var p = document.createElement('p');
-    p.textContent = l;
-    panel.appendChild(p);
-  });
-
-  card.appendChild(panel);
-
-  var footer = document.getElementById('footer-' + index);
-  footer.innerHTML = '';
-
-  var btnR = document.createElement('button');
-  btnR.className = 'btn-retry';
-  btnR.textContent = 'Try again';
-  btnR.addEventListener('click', function() { retryExercise(index); });
-  footer.appendChild(btnR);
-
-  var btnN = document.createElement('button');
-  btnN.className = 'btn-next';
-  btnN.textContent = index >= 2 ? 'Finish' : 'Next \u2192';
-  btnN.addEventListener('click', function() { advanceOrComplete(index); });
-  footer.appendChild(btnN);
-
-  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
-}
-
-function showApiError(index) {
-  var card = document.getElementById('card-' + index);
-  var old = card.querySelector('.feedback, .api-error');
-  if (old) old.remove();
-  var err = document.createElement('div');
-  err.className = 'api-error';
-  err.textContent = 'Feedback is temporarily unavailable. Check your connection and try again.';
-  card.appendChild(err);
-  var btn = document.getElementById('btn-submit-' + index);
-  if (btn) { btn.disabled = false; btn.textContent = 'Get feedback'; }
-}
-
-function retryExercise(index) {
-  var card = document.getElementById('card-' + index);
-  var panel = card.querySelector('.feedback');
-  if (panel) panel.remove();
-  var footer = document.getElementById('footer-' + index);
-  footer.innerHTML = '';
-
-  var btnS = document.createElement('button');
-  btnS.className = 'btn-submit';
-  btnS.textContent = 'Get feedback';
-  btnS.id = 'btn-submit-' + index;
-  btnS.addEventListener('click', function() { submitCombination(index); });
-  footer.appendChild(btnS);
-
-  var btnSk = document.createElement('button');
-  btnSk.className = 'btn-skip';
-  btnSk.textContent = 'Skip';
-  btnSk.addEventListener('click', function() { advanceOrComplete(index); });
-  footer.appendChild(btnSk);
-
-  var ta = document.getElementById('ta-' + index);
-  ta.value = '';
-  ta.focus();
-}
-
-function advanceOrComplete(index) {
-  currentIndex = index + 1;
-  if (currentIndex >= 3) {
-    document.getElementById('exerciseContainer').innerHTML = '';
-    document.getElementById('completionNote').textContent = BANDS[currentBand].completion;
-    document.getElementById('completionScreen').classList.add('visible');
-    document.getElementById('progressFill').style.width = '100%';
-    document.getElementById('progressLabel').textContent = '3 of 3';
-    window.scrollTo({top:0, behavior:'smooth'});
-  } else {
-    renderExercise(currentIndex);
-    window.scrollTo({top:0, behavior:'smooth'});
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('bandButtons').addEventListener('click', function(e) {
-    var btn = e.target.closest('.band-btn');
-    if (btn) selectBand(parseInt(btn.dataset.band));
-  });
-  document.getElementById('restartBtn').addEven
+<p><img style="padding-bottom: 10px;" role="presentation" src="https://clemson.instructure.com/courses/285834/files/29332072/preview" alt="" width="100%" height="100%" data-api-endpoint="https://clemson.instructure.com/api/v1/courses/285834/files/29332072" data-api-returntype="File" /></p>
