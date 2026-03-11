@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sentence Combining · Grade Band Practice · EDSC 4850</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -14,15 +14,15 @@
     --orange-bg:#f5ede0;--orange-bd:#c9a878;--orange-dk:#a06830;
     --yellow-bg:#f5f0d8;--yellow-bd:#c9bf78;--yellow-dk:#908030;
   }
-  body { background:var(--parchment); font-family:'Source Serif 4',Georgia,serif; font-size:1rem; color:var(--text); line-height:1.65; min-height:100vh; }
+  body { background:var(--parchment); font-family:Georgia,'Times New Roman',serif; font-size:1rem; color:var(--text); line-height:1.65; min-height:100vh; }
   header { background:var(--parchment2); border-bottom:2px solid var(--gold); padding:1.4rem 2rem 1.1rem; text-align:center; }
-  header h1 { font-family:'Playfair Display',Georgia,serif; font-size:1.5rem; }
+  header h1 { font-family:Georgia,'Times New Roman',serif; font-size:1.5rem; }
   header p { font-size:0.88rem; color:var(--muted); margin-top:0.3rem; font-style:italic; }
   main { max-width:780px; margin:0 auto; padding:1.6rem 1.4rem 3rem; }
   .band-selector { margin-bottom:1.8rem; }
   .band-selector-label { font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); margin-bottom:0.6rem; }
   .band-buttons { display:flex; gap:0.5rem; flex-wrap:wrap; }
-  .band-btn { font-family:'Source Serif 4',Georgia,serif; font-size:0.88rem; padding:0.45rem 1rem; border-radius:4px; border:1px solid var(--border); background:var(--parchment2); color:var(--text); cursor:pointer; transition:all 0.15s; }
+  .band-btn { font-family:Georgia,'Times New Roman',serif; font-size:0.88rem; padding:0.45rem 1rem; border-radius:4px; border:1px solid var(--border); background:var(--parchment2); color:var(--text); cursor:pointer; transition:all 0.15s; }
   .band-btn:hover { border-color:var(--gold); color:var(--gold-dark); }
   .band-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; font-weight:600; }
   .band-intro { background:var(--parchment2); border-left:4px solid var(--gold); border-radius:0 5px 5px 0; padding:0.9rem 1.1rem; margin-bottom:1.5rem; font-size:0.93rem; color:var(--muted); font-style:italic; display:none; }
@@ -34,7 +34,7 @@
   .exercise-card { border-radius:8px; border:1px solid var(--border); overflow:hidden; margin-bottom:1.2rem; transition:box-shadow 0.2s; }
   .exercise-card:focus-within { box-shadow:0 2px 12px rgba(196,162,76,0.18); }
   .card-header { background:var(--parchment2); border-bottom:1px solid var(--border); padding:0.8rem 1.1rem; display:flex; align-items:baseline; gap:0.6rem; }
-  .card-number { font-family:'Playfair Display',serif; font-size:0.76rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold-dark); }
+  .card-number { font-family:Georgia,serif; font-size:0.76rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold-dark); }
   .card-technique { font-size:0.81rem; color:var(--muted); font-style:italic; }
   .card-body { padding:1.1rem 1.1rem 0.7rem; }
   .source-sentences { background:var(--parchment2); border-left:3px solid var(--gold); border-radius:0 4px 4px 0; padding:0.8rem 1rem; margin-bottom:0.9rem; }
@@ -43,11 +43,11 @@
   .source-sentences p::before { content:attr(data-n) '. '; color:var(--gold-dark); font-weight:600; font-size:0.84rem; }
   .prompt-label { font-size:0.82rem; font-weight:600; color:var(--muted); margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
   .hint { font-size:0.82rem; color:var(--muted); font-style:italic; margin-bottom:0.55rem; border-left:2px solid var(--border); padding-left:0.6rem; }
-  textarea { width:100%; min-height:72px; border:1px solid var(--border); border-radius:5px; background:#fffdf8; font-family:'Source Serif 4',Georgia,serif; font-size:0.96rem; color:var(--text); padding:0.65rem 0.8rem; line-height:1.55; resize:vertical; outline:none; transition:border-color 0.2s; }
+  textarea { width:100%; min-height:72px; border:1px solid var(--border); border-radius:5px; background:#fffdf8; font-family:Georgia,'Times New Roman',serif; font-size:0.96rem; color:var(--text); padding:0.65rem 0.8rem; line-height:1.55; resize:vertical; outline:none; transition:border-color 0.2s; }
   textarea:focus { border-color:var(--gold); }
   textarea::placeholder { color:#b0a898; font-style:italic; }
   .card-footer { padding:0.75rem 1.1rem 0.9rem; display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
-  button { font-family:'Source Serif 4',Georgia,serif; font-size:0.87rem; cursor:pointer; border-radius:4px; padding:0.48rem 1rem; border:none; transition:background 0.15s, transform 0.1s; }
+  button { font-family:Georgia,'Times New Roman',serif; font-size:0.87rem; cursor:pointer; border-radius:4px; padding:0.48rem 1rem; border:none; transition:background 0.15s, transform 0.1s; }
   button:active { transform:translateY(1px); }
   button:disabled { opacity:0.45; cursor:not-allowed; transform:none; }
   .btn-submit { background:var(--gold); color:#fff; font-weight:600; }
@@ -62,7 +62,7 @@
   @keyframes spin { to { transform:rotate(360deg); } }
   .feedback { border-radius:0 0 7px 7px; border-top:1px solid var(--border); padding:1rem 1.1rem 1.1rem; font-size:0.93rem; animation:fadeIn 0.3s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none} }
-  .feedback h4 { font-family:'Playfair Display',serif; font-size:0.93rem; margin-bottom:0.5rem; }
+  .feedback h4 { font-family:Georgia,serif; font-size:0.93rem; margin-bottom:0.5rem; }
   .feedback p { margin-bottom:0.45rem; line-height:1.6; }
   .feedback p:last-child { margin-bottom:0; }
   .technique-badge { display:inline-block; font-size:0.74rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; border-radius:3px; padding:0.13rem 0.45rem; margin-bottom:0.55rem; }
@@ -77,7 +77,7 @@
   .fb-2 .technique-badge { background:var(--yellow-dk); color:#fff; }
   .completion { text-align:center; padding:2.2rem 1.4rem; background:var(--parchment2); border:1px solid var(--border); border-radius:8px; display:none; }
   .completion.visible { display:block; animation:fadeIn 0.4s ease; }
-  .completion h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:0.65rem; color:var(--gold-dark); }
+  .completion h2 { font-family:Georgia,serif; font-size:1.4rem; margin-bottom:0.65rem; color:var(--gold-dark); }
   .completion p { color:var(--muted); font-size:0.92rem; margin-bottom:0.45rem; }
   .restart-btn { margin-top:1.1rem; background:var(--gold); color:#fff; font-weight:600; padding:0.55rem 1.3rem; font-size:0.9rem; cursor:pointer; }
   .restart-btn:hover { background:var(--gold-dark); }
